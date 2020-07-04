@@ -1,0 +1,63 @@
+.guess {
+  position: relative;
+  display: flex;
+  margin-bottom: 15px;
+
+  input {
+    background: none;
+    border: none;
+    border-bottom: 2px solid $border-color;
+
+    text-transform: uppercase;
+    font-size: 2em;
+    letter-spacing: .3em;
+    text-align: center;
+
+    &.word {
+      width: 200px;
+      margin-right: 20px;
+    }
+
+    &.common {
+      width: 50px;
+      margin-right: 50px; // space for the remove button
+    }
+
+    // hide spin buttons
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none; // display: none; crashes Chrome on hover
+      margin: 0; // apparently some margin are still there even though it's hidden
+    }
+
+    &[type=number] {
+      -moz-appearance:textfield; // firefox
+    }
+  }
+
+  .remove {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    right: 0;
+    bottom: 5px;
+    cursor: pointer;
+
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      width: 80%;
+      height: 2px;
+      background-color: $border-color;
+      top: 50%;
+    }
+
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
+}
