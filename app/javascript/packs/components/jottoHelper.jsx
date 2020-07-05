@@ -9,7 +9,9 @@ class JottoHelper extends Component {
   state = {
     loading: false,
     guesses: [this.addGuess()],
-    words: []
+    words: [],
+    found: [],
+    eliminated: []
   }
 
   onGuessRemove = (id) => {

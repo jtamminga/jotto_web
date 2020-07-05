@@ -1,9 +1,13 @@
 import React from 'react'
+import { sample } from '../utils'
 
-function words({ words }) {
+export default function words({ words, onClick }) {
   return (
-    <div>
+    <div className="words">
       <p>{words.length} words!</p>
+      <p>
+        <WordList words={sample(words, 20)} />
+      </p>
       { words.length < 30 &&
         <ul>
           { words.map(word =>
@@ -15,4 +19,6 @@ function words({ words }) {
   )
 }
 
-export default words
+function WordList({ words }) {
+  return words.map(word => <span>{word}</span>)
+}

@@ -1,4 +1,5 @@
 class Api::WordsController < ActionController::API
+  include Analyzer
 
   def words
     @words ||= Words.new
@@ -12,7 +13,13 @@ class Api::WordsController < ActionController::API
   end
 
   def jotto
-    render json: { words: words.jotto(params[:guesses]) }
+    possibilites = words.jotto(params[:guesses])
+    analytics = analyze_chars(possibilites)
+
+    render json: {
+      words: possibilites,
+      analytics: analytics
+    }
   end
 
 end
