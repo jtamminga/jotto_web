@@ -1,0 +1,35 @@
+.words {
+  $border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+
+  .word {
+    margin-right: 8px;
+    margin-bottom: 12px;
+
+    span {
+      background-color: $default-color;
+      text-transform: uppercase;
+      padding: 2px 3px;
+
+      &:first-child {
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+        padding-left: 6px;
+      }
+      &:last-child {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+        padding-right: 6px;
+      }
+
+      &.found {
+        background-color: $found-color;
+      }
+
+      &.eliminated {
+        background-color: $eliminated-color;
+      }
+    }
+  }
+}

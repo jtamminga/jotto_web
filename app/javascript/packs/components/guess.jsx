@@ -1,24 +1,29 @@
 import React, { Component } from 'react'
+import CharInput from './char-input'
 
 class Guess extends Component {
 
-  onWordChange = (e) => {
-    if (e.target.value.length == 5) {
-      this.commonInput.focus()
-      this.commonInput.select()
-      this.props.onWordChange(e)
-    }
+  onWordChange = (word) => {
+    this.commonInput.focus()
+    this.props.onWordChange(word)
   }
+
+  // <input
+  //   autoFocus
+  //   type="text"
+  //   className="word"
+  //   defaultValue={this.props.word}
+  //   onChange={this.onWordChange} />
 
   render() {
     return (
       <div className="guess">
-        <input
-          autoFocus
-          type="text"
+
+
+        <CharInput
           className="word"
-          defaultValue={this.props.word}
-          onChange={this.onWordChange} />
+          word={this.props.word}
+          onWord={this.onWordChange} />
 
         <input
           type="number"

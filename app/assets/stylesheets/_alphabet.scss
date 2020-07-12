@@ -1,0 +1,24 @@
+.alphabet {
+  margin-bottom: 20px;
+
+  span {
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
+    background-color: $default-color;
+
+    border-radius: 20px;
+    width: 22px;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+
+    &.found {
+      background-color: $found-color;
+    }
+
+    &.eliminated {
+      background-color: $eliminated-color;
+    }
+  }
+}

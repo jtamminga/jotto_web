@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
+import { DeductionContext } from './deduction-context'
 import Guess from './guess'
-import Words from './words'
+import WordSummary from './word-summary'
+import Alphabet from './alphabet'
 import { fetchGuesses } from '../api'
 
-window.id = 0;
+window.id = 1;
 
 class JottoHelper extends Component {
   state = {
     loading: false,
     guesses: [this.addGuess()],
+    search: [],
     words: [],
+
     found: [],
     eliminated: []
   }
@@ -19,12 +23,16 @@ class JottoHelper extends Component {
     this.setState({ guesses }, this.getData)
   }
 
-  onWordChange = (id, e) => {
-    this.updateGuess(id, { word: e.target.value })
+  onWordChange = (id, word) => {
+    this.updateGuess(id, { word })
   }
 
   onCommonChange = (id, e) => {
     this.updateGuess(id, { common: parseInt(e.target.value) })
+  }
+
+  onWordClick = (word) => {
+    console.log('word suggestion clicked', word)
   }
 
   addGuess() {
@@ -59,6 +67,18 @@ class JottoHelper extends Component {
       .map(g => ({ word: g.word, common: g.common }))
   }
 
+  guessesMatch(preGuesses, curGuesses) {
+    if (preGuesses.length != curGuesses.length) return false
+
+    let result = true
+    for (let i = 0; i < preGuesses.length; i++) {
+      result = result
+        && preGuesses[i].word === curGuesses[i].word
+        && preGuesses[i].common === curGuesses[i].common
+    }
+    return result
+  }
+
   getData() {
     const guesses = this.validGuesses()
 
@@ -67,16 +87,27 @@ class JottoHelper extends Component {
       return
     }
 
+    if (this.guessesMatch(this.state.search, guesses)) {
+      // just return if guesses didn't change
+      return
+    }
+
     this.setState({ loading: true })
 
     fetchGuesses(guesses)
-      .then(({ words }) => {
-        this.setState({ loading: false, words })
+      .then(({ words, analytics: { found, eliminated } }) => {
+        this.setState({
+          loading: false,
+          search: guesses,
+          words,
+          found,
+          eliminated
+        })
       })
   }
 
-  render() {
-    let guesses = this.state.guesses.map((guess, i) =>
+  renderGuesses(guesses) {
+    return guesses.map((guess, i) =>
       <Guess
         key={guess.id}
         onWordChange={this.onWordChange.bind(this, guess.id)}
@@ -84,14 +115,28 @@ class JottoHelper extends Component {
         onRemove={this.onGuessRemove.bind(this, guess.id)}
         {...guess} />
     )
+  }
+
+  render() {
+    const { guesses, found, eliminated } = this.state
 
     return (
       <>
         <h3>Find words</h3>
 
-        {guesses}
+        <DeductionContext.Provider value={{ found, eliminated }}>
+          <Alphabet
+            found={this.state.found}
+            eliminated={this.state.eliminated} />
 
-        <Words words={this.state.words} />
+          <div className="guesses-container">
+            <div className="guesses">
+              {this.renderGuesses(guesses)}
+            </div>
+          </div>
+
+          <WordSummary words={this.state.words} onClick={this.onWordClick} />
+        </DeductionContext.Provider>
       </>
     )
   }

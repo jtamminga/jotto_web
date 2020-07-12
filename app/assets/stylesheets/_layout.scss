@@ -8,5 +8,10 @@ body {
 
   & > div {
     max-width: 500px;
+
+    .guesses-container {
+      display: flex;
+      justify-content: center;
+    }
   }
 }

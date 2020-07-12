@@ -2,26 +2,29 @@
   position: relative;
   display: flex;
   margin-bottom: 15px;
+  // height: 50px;
+
+  .word {
+    width: 200px;
+    margin-right: 20px;
+  }
+
+  .common {
+    width: 50px;
+    margin-right: 50px; // space for the remove button
+  }
 
   input {
     background: none;
     border: none;
     border-bottom: 2px solid $border-color;
 
+    font-family: monospace;
     text-transform: uppercase;
     font-size: 2em;
     letter-spacing: .3em;
     text-align: center;
-
-    &.word {
-      width: 200px;
-      margin-right: 20px;
-    }
-
-    &.common {
-      width: 50px;
-      margin-right: 50px; // space for the remove button
-    }
+    // line-height: 1.6em;
 
     // hide spin buttons
     &::-webkit-outer-spin-button,

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import JottoHelper from './components/jottoHelper.jsx'
+import JottoHelper from './components/jotto-helper.jsx'
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(

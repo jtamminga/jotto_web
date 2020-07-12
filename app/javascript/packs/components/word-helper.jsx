@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Input from './input.jsx'
-import Words from './words.jsx'
+import WordSummary from './word-summary.jsx'
 
 class WordHelper extends Component {
   state = {
@@ -46,7 +46,7 @@ class WordHelper extends Component {
         <p>don't contain</p>
         <Input onChange={this.onNotContainsChange} />
 
-        <Words words={this.state.words} />
+        <WordSummary words={this.state.words} />
       </>
     )
   }
