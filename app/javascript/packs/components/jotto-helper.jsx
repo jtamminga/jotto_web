@@ -32,7 +32,11 @@ class JottoHelper extends Component {
   }
 
   onWordClick = (word) => {
-    console.log('word suggestion clicked', word)
+    let a = this.state.guesses.slice(0, -1)
+    let b = this.state.guesses.slice(-1)[0]
+    let guesses = [ ...a, { ...b, word } ]
+
+    this.setState({ guesses })
   }
 
   addGuess() {

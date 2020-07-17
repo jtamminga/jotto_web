@@ -5,13 +5,13 @@ import { sample } from '../utils'
 export default function WordSummary({ words, onClick }) {
   return (
     <div className="word-summary">
-      <p>{words.length} words!</p>
-      <p>
+      <div>{words.length} words!</div>
+      <div>
         <h5>Random words left</h5>
         <div className="words">
           <WordList words={sample(words, 20)} onClick={onClick} />
         </div>
-      </p>
+      </div>
       <a href="#">Show more</a>
     </div>
   )

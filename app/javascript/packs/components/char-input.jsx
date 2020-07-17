@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { DeductionContext } from './deduction-context'
 
-class CharInput extends Component {
+class CharInput extends PureComponent {
   constructor(props) {
     super(props)
     this.inputRef = React.createRef()
