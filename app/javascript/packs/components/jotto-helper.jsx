@@ -87,7 +87,7 @@ class JottoHelper extends Component {
     const guesses = this.validGuesses()
 
     if (guesses.length == 0) {
-      this.setState({ words: [] })
+      this.setState({ words: [], found: [], eliminated: [] })
       return
     }
 

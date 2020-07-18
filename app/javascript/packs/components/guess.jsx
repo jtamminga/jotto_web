@@ -1,26 +1,19 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import CharInput from './char-input'
 
-class Guess extends Component {
+class Guess extends PureComponent {
 
   onWordChange = (word) => {
     this.commonInput.focus()
     this.props.onWordChange(word)
   }
 
-  // <input
-  //   autoFocus
-  //   type="text"
-  //   className="word"
-  //   defaultValue={this.props.word}
-  //   onChange={this.onWordChange} />
-
   render() {
     return (
       <div className="guess">
 
-
         <CharInput
+          key={this.props.word}
           className="word"
           word={this.props.word}
           onWord={this.onWordChange} />
