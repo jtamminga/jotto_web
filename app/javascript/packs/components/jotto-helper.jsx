@@ -11,9 +11,9 @@ class JottoHelper extends Component {
   state = {
     loading: false,
     guesses: [this.addGuess()],
+
     search: [],
     words: [],
-
     found: [],
     eliminated: []
   }

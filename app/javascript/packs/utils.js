@@ -1,10 +1,18 @@
-export function sample(arr, numElements) {
-  let result = []
-  for (var i = 0; i < Math.min(arr.length, numElements); i++) {
-    result.push(arr[Math.floor(Math.random() * arr.length)])
-  }
+export function sample(arr, n) {
+  let len = arr.length
 
-  return result.length == 1 ? result[0] : result
+  n = Math.min(len, n)
+
+  let result = new Array(n),
+      taken = new Array(len);
+
+  while (n--) {
+      var x = Math.floor(Math.random() * len);
+      result[n] = arr[x in taken ? taken[x] : x];
+      taken[x] = --len in taken ? taken[len] : len;
+  }
+  
+  return result;
 }
 
 export function charClasses(char, found, eliminated) {

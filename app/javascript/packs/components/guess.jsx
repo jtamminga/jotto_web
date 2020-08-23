@@ -13,7 +13,6 @@ class Guess extends PureComponent {
       <div className="guess">
 
         <CharInput
-          key={this.props.word}
           className="word"
           word={this.props.word}
           onWord={this.onWordChange} />

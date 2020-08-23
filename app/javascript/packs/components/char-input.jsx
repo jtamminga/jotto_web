@@ -1,15 +1,34 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { DeductionContext } from './deduction-context'
 
-class CharInput extends PureComponent {
+class CharInput extends Component {
   constructor(props) {
     super(props)
     this.inputRef = React.createRef()
 
     this.state = {
       isFocused: true,
-      isValid: false,
       chars: (this.props.word.toLowerCase() || '').split()
+    }
+  }
+
+  onChange = (e) => {
+    let word = e.target.value.toLowerCase()
+    let chars = word.split('')
+    let isValid = this.isValid(chars)
+
+    this.setState({ chars, isFocused: !isValid })
+
+    if (isValid) this.props.onWord(word)
+  }
+
+  onClick = (e) => {
+    this.setState({ isFocused: true })
+  }
+
+  onBlur = (e) => {
+    if (this.isValid(this.state.chars)) {
+      this.setState({ isFocused: false })
     }
   }
 
@@ -27,28 +46,8 @@ class CharInput extends PureComponent {
     return dups
   }
 
-  onChange = (e) => {
-    let word = e.target.value.toLowerCase()
-    let chars = word.split('')
-    let dups = this.duplicates(chars)
-
-    this.setState({ chars, dups })
-    if (word.length == 5 && dups.length == 0) {
-      this.setState({ isFocused: false, isValid: true })
-      this.props.onWord(word)
-    } else {
-      this.setState({ isValid: false })
-    }
-  }
-
-  onClick = (e) => {
-    this.setState({ isFocused: true })
-  }
-
-  onBlur = (e) => {
-    if (this.state.isValid) {
-      this.setState({ isFocused: false })
-    }
+  isValid(chars) {
+    return chars.length == 5 && this.duplicates(chars).length == 0
   }
 
   charClasses(char) {
