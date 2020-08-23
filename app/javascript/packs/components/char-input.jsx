@@ -7,19 +7,18 @@ class CharInput extends Component {
     this.inputRef = React.createRef()
 
     this.state = {
-      isFocused: true,
-      chars: (this.props.word.toLowerCase() || '').split()
+      isFocused: true
     }
   }
 
   onChange = (e) => {
     let word = e.target.value.toLowerCase()
-    let chars = word.split('')
+    let chars = this.toChars(word)
     let isValid = this.isValid(chars)
 
-    this.setState({ chars, isFocused: !isValid })
+    this.setState({ isFocused: !isValid })
 
-    if (isValid) this.props.onWord(word)
+    if (isValid) this.props.onWordChange(word)
   }
 
   onClick = (e) => {
@@ -27,9 +26,13 @@ class CharInput extends Component {
   }
 
   onBlur = (e) => {
-    if (this.isValid(this.state.chars)) {
+    if (this.isValid(this.props.word)) {
       this.setState({ isFocused: false })
     }
+  }
+
+  toChars(word) {
+    return word.split('')
   }
 
   duplicates(chars) {
@@ -61,25 +64,25 @@ class CharInput extends Component {
   render() {
     return (
       <>
-        { !this.state.isFocused &&
-          <div className="word input-chars" onClick={this.onClick}>
-            { this.state.chars.map((char, i) =>
-              <span key={i} className={this.charClasses(char)}>
-                {char}
-              </span>
-            )}
-          </div>
-        }
-
-        { this.state.isFocused &&
+        { this.state.isFocused ?
           <input
             autoFocus
             type="text"
-            defaultValue={this.state.chars.join('')}
+            defaultValue={this.props.word}
             onChange={this.onChange}
             onBlur={this.onBlur}
             ref={this.inputRef}
             { ...this.props }/>
+
+            :
+
+            <div className="word input-chars" onClick={this.onClick}>
+              { this.toChars(this.props.word).map((char, i) =>
+                <span key={i} className={this.charClasses(char)}>
+                  {char}
+                </span>
+              )}
+            </div>
         }
       </>
     )

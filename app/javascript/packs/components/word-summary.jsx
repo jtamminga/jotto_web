@@ -5,9 +5,9 @@ import { sample } from '../utils'
 export default function WordSummary({ words, onClick }) {
   return (
     <div className="word-summary">
-      <div>{words.length} words!</div>
+      <div>{words.length} possible words</div>
       <div>
-        <h5>Random words left</h5>
+        <h5>Sample possible words</h5>
         <div className="words">
           <WordList words={sample(words, 20)} onClick={onClick} />
         </div>

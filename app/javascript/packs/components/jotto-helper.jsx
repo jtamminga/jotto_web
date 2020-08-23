@@ -27,8 +27,8 @@ class JottoHelper extends Component {
     this.updateGuess(id, { word })
   }
 
-  onCommonChange = (id, e) => {
-    this.updateGuess(id, { common: parseInt(e.target.value) })
+  onCommonChange = (id, common) => {
+    this.updateGuess(id, { common })
   }
 
   onWordClick = (word) => {
