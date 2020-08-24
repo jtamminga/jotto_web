@@ -1,10 +1,22 @@
 import React, { PureComponent } from 'react'
 import CharInput from './char-input'
+import { wordValid } from '../utils'
 
 class Guess extends PureComponent {
 
+  constructor(props) {
+    super(props)
+    this.commonInput = React.createRef()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.word != this.props.word && wordValid(this.props.word)) {
+      this.commonInput.current.focus()
+    }
+  }
+
   onWordChange = (word) => {
-    this.commonInput.focus()
+    this.commonInput.current.focus()
     this.props.onWordChange(word)
   }
 
@@ -33,7 +45,7 @@ class Guess extends PureComponent {
           className="common"
           defaultValue={this.props.isNew ? '' : this.props.common}
           onChange={this.onCommonChange}
-          ref={input => this.commonInput = input}
+          ref={this.commonInput}
           min="0"
           max="5" />
 

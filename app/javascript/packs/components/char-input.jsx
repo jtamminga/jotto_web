@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
 import { DeductionContext } from './deduction-context'
+import { wordValid, charClasses } from '../utils'
 
 class CharInput extends Component {
-  constructor(props) {
-    super(props)
-    this.inputRef = React.createRef()
+  state = {
+    isFocused: true
+  }
 
-    this.state = {
-      isFocused: true
+  componentDidUpdate(prevProps) {
+    if (this.state.isFocused
+        && prevProps.word != this.props.word
+        && wordValid(this.props.word)) {
+      this.setState({ isFocused: false })
     }
   }
 
   onChange = (e) => {
     let word = e.target.value.toLowerCase()
     let chars = this.toChars(word)
-    let isValid = this.isValid(chars)
+    let isValid = wordValid(chars)
 
     this.setState({ isFocused: !isValid })
 
@@ -26,7 +30,7 @@ class CharInput extends Component {
   }
 
   onBlur = (e) => {
-    if (this.isValid(this.props.word)) {
+    if (wordValid(this.props.word)) {
       this.setState({ isFocused: false })
     }
   }
@@ -35,50 +39,26 @@ class CharInput extends Component {
     return word.split('')
   }
 
-  duplicates(chars) {
-    let hash = {}
-    for (var char of chars) {
-      hash[char] = hash[char] === undefined ? 1 : hash[char] + 1
-    }
-
-    let dups = []
-    for (var char in hash) {
-      if (hash[char] > 1) dups.push(char)
-    }
-
-    return dups
-  }
-
-  isValid(chars) {
-    return chars.length == 5 && this.duplicates(chars).length == 0
-  }
-
-  charClasses(char) {
-    const { found, eliminated } = this.context
-    let classes = []
-    if (found.includes(char)) classes.push('found')
-    if (eliminated.includes(char)) classes.push('eliminated')
-    return classes
-  }
-
   render() {
+    const { word, onWordChange, ...props } = this.props
+    const { found, eliminated } = this.context
+
     return (
       <>
         { this.state.isFocused ?
           <input
             autoFocus
             type="text"
-            defaultValue={this.props.word}
+            defaultValue={word}
             onChange={this.onChange}
             onBlur={this.onBlur}
-            ref={this.inputRef}
-            { ...this.props }/>
+            { ...props }/>
 
             :
 
             <div className="word input-chars" onClick={this.onClick}>
-              { this.toChars(this.props.word).map((char, i) =>
-                <span key={i} className={this.charClasses(char)}>
+              { this.toChars(word).map((char, i) =>
+                <span key={i} className={charClasses(char, found, eliminated)}>
                   {char}
                 </span>
               )}
