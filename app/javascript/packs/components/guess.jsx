@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import CharInput from './char-input'
-import { wordValid } from '../utils'
+import { wordValid } from '../core/utils'
 
 class Guess extends PureComponent {
 

@@ -1,0 +1,30 @@
+input {
+  background: none;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid $border-color;
+
+  font-family: monospace;
+  text-transform: uppercase;
+  font-size: 2em;
+  letter-spacing: .3em;
+  text-align: center;
+  // line-height: 1.6em;
+
+  // hide spin buttons
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none; // display: none; crashes Chrome on hover
+    margin: 0; // apparently some margin are still there even though it's hidden
+  }
+
+  &[type=number] {
+    -moz-appearance:textfield; // firefox
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

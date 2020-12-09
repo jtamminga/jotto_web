@@ -1,8 +1,8 @@
 import React from 'react'
-import { DeductionContext } from './deduction-context'
-import { charClasses } from '../utils'
+import { DeductionContext } from '../../deduction-context'
+import { charClasses } from '../core/utils'
 
-export default function Alphabet({ found, eliminated }) {
+export default function Alphabet() {
   const alphabet = [...'abcdefghijklmnopqrstuvwxyz']
 
   return (

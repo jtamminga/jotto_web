@@ -1,6 +1,6 @@
 import React from 'react'
-import Word from './word'
-import { sample } from '../utils'
+import WordList from './word-list'
+import { sample } from '../core/utils'
 
 export default function WordSummary({ words, onClick }) {
   return (
@@ -15,9 +15,4 @@ export default function WordSummary({ words, onClick }) {
       <a href="#">Show more</a>
     </div>
   )
-}
-
-export function WordList({ words, onClick }) {
-  return words.map((word, i) =>
-    <Word key={i} value={word} onClick={onClick && onClick.bind(this, word)} />)
 }

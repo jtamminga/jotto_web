@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Input from './input.jsx'
-import WordSummary from './word-summary.jsx'
+import Input from '../components/input.jsx'
+import WordSummary from '../components/word-summary.jsx'
 
 class WordHelper extends Component {
   state = {

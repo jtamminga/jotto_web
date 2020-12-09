@@ -5,6 +5,10 @@ class Words
       .map{ |word| word.chomp }
   end
 
+  def all
+    @words
+  end
+
   def query(contains = [], not_contains = [])
     @words
       .select{ |w| superset(w.chars, contains) }

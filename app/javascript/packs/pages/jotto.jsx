@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { DeductionContext } from './deduction-context'
-import Guess from './guess'
-import WordSummary from './word-summary'
-import Alphabet from './alphabet'
-import { fetchGuesses } from '../api'
+import { DeductionContext } from '../../deduction-context'
+import Guess from '../components/guess'
+import WordSummary from '../components/word-summary'
+import Alphabet from '../components/alphabet'
+import Words from '../core/words'
+import analyzer from '../core/analyzer'
 
 window.id = 1;
 
@@ -37,6 +38,10 @@ class JottoHelper extends Component {
     let guesses = [ ...a, { ...b, word } ]
 
     this.setState({ guesses })
+  }
+
+  onFindWordsClick = () => {
+    // open up the find words thing
   }
 
   addGuess() {
@@ -96,18 +101,21 @@ class JottoHelper extends Component {
       return
     }
 
-    this.setState({ loading: true })
+    let words = Words.withGuesses(guesses)
+    let { found, eliminated } = analyzer(words)
 
-    fetchGuesses(guesses)
-      .then(({ words, analytics: { found, eliminated } }) => {
-        this.setState({
-          loading: false,
-          search: guesses,
-          words,
-          found,
-          eliminated
-        })
-      })
+    console.groupCollapsed('analyst info')
+    console.log('num words', words.length)
+    console.log('found', found)
+    console.log('eliminated', eliminated)
+    console.groupEnd()
+
+    this.setState({
+      search: guesses,
+      words,
+      found,
+      eliminated
+    })
   }
 
   renderGuesses(guesses) {
@@ -126,12 +134,13 @@ class JottoHelper extends Component {
 
     return (
       <>
-        <h3>Find words</h3>
+        <div className="header">
+          <h3>Jotto Helper</h3>
+          <a onClick={this.onFindWordsClick}>Find Words</a>
+        </div>
 
         <DeductionContext.Provider value={{ found, eliminated }}>
-          <Alphabet
-            found={this.state.found}
-            eliminated={this.state.eliminated} />
+          <Alphabet />
 
           <div className="guesses-container">
             <div className="guesses">

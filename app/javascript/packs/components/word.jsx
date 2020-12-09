@@ -1,7 +1,8 @@
 import React from 'react'
-import { DeductionContext } from './deduction-context'
-import { charClasses } from '../utils'
+import { DeductionContext } from '../../deduction-context'
+import { charClasses } from '../core/utils'
 
+// The full word
 export default function Word({ value, className = '', ...props }) {
   let chars = value.split('')
 

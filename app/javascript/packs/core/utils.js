@@ -39,3 +39,38 @@ export function duplicates(chars) {
 export function wordValid(chars) {
   return chars.length == 5 && duplicates(chars).length == 0
 }
+
+export function chunks(str, len) {
+  let chunks = []
+
+  for (let i = 0; i < str.length; i += len) {
+    chunks.push(str.substring(i, i + len))
+  }
+
+  return chunks
+}
+
+export function superset(a, b) {
+  intersectLen(a, b) == b.length
+}
+
+export function intersectLen(a, b) {
+  let n = 0;
+  for (let i = 0; i < a.length; i++) {
+      n += b.includes(a[i])
+  }
+
+  return n
+}
+
+export function intersect(a, b) {
+  return a.filter(n => b.includes(n))
+}
+
+export function subtract(a, b) {
+  return a.filter(x => !b.includes(x))
+}
+
+export function union(a, b) {
+  return [...new Set([...a, ...b])]
+}

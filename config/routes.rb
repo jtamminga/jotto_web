@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  root to: 'application#word_helper'
+  root to: 'application#jotto_helper'
 
   get 'jotto', to: 'application#jotto_helper'
+  get 'words', to: 'application#word_helper'
 
   namespace :api do
     get 'words', to: 'words#query'

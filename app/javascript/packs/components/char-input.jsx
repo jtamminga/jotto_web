@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { DeductionContext } from './deduction-context'
-import { wordValid, charClasses } from '../utils'
+import { DeductionContext } from '../../deduction-context'
+import { wordValid, charClasses } from '../core/utils'
 
 class CharInput extends Component {
   state = {
