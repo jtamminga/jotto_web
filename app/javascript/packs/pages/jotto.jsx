@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { DeductionContext } from '../../deduction-context'
+import { DeductionContext } from '../core/deduction-context'
 import Guess from '../components/guess'
 import WordSummary from '../components/word-summary'
 import Alphabet from '../components/alphabet'

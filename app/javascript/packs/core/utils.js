@@ -74,3 +74,8 @@ export function subtract(a, b) {
 export function union(a, b) {
   return [...new Set([...a, ...b])]
 }
+
+export function wordSearch(words, contains, notContains) {
+  return words.filter(word =>
+    superset(word, contains) && intersectLen(word, notContains) == 0)
+}

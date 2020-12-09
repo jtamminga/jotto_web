@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { DeductionContext } from '../../deduction-context'
+import { DeductionContext } from '../core/deduction-context'
 import { wordValid, charClasses } from '../core/utils'
 
 class CharInput extends Component {
@@ -48,7 +48,6 @@ class CharInput extends Component {
         { this.state.isFocused ?
           <input
             autoFocus
-            type="text"
             defaultValue={word}
             onChange={this.onChange}
             onBlur={this.onBlur}

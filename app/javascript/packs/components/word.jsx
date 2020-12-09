@@ -1,5 +1,5 @@
 import React from 'react'
-import { DeductionContext } from '../../deduction-context'
+import { DeductionContext } from '../core/deduction-context'
 import { charClasses } from '../core/utils'
 
 // The full word
