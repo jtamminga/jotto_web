@@ -51,7 +51,7 @@ export function chunks(str, len) {
 }
 
 export function superset(a, b) {
-  intersectLen(a, b) == b.length
+  return intersectLen(a, b) == b.length
 }
 
 export function intersectLen(a, b) {

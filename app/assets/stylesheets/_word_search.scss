@@ -1,0 +1,27 @@
+.word-search {
+    border-top: 1px dashed $border-color;
+    margin-top: 20px;
+    padding-top: 20px;
+
+    .word-summary {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .word-filter {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 20px;
+        margin-bottom: 20px;
+
+        > div {
+            > input {
+                margin-bottom: 3px;
+            }
+            > span {
+                color: $text-muted;
+            }
+        }
+    }
+}

@@ -8,9 +8,7 @@ export default function WordSummary({ words, onClick }) {
       <div>{words.length} possible words</div>
       <div>
         <h5>Sample possible words</h5>
-        <div className="words">
-          <WordList words={sample(words, 20)} onClick={onClick} />
-        </div>
+        <WordList words={sample(words, 20)} onClick={onClick} />
       </div>
       <a href="#">Show more</a>
     </div>

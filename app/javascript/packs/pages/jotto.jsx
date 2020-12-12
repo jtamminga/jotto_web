@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { DeductionContext } from '../core/deduction-context'
 import Guess from '../components/guess'
-import WordSummary from '../components/word-summary'
 import Alphabet from '../components/alphabet'
 import Words from '../core/words'
 import analyzer from '../core/analyzer'
+import WordSearch from '../components/word-search'
 
 window.id = 1;
 
@@ -14,7 +14,7 @@ class JottoHelper extends Component {
     guesses: [this.addGuess()],
 
     search: [],
-    words: [],
+    words: Words.all,
     found: [],
     eliminated: []
   }
@@ -38,10 +38,6 @@ class JottoHelper extends Component {
     let guesses = [ ...a, { ...b, word } ]
 
     this.setState({ guesses })
-  }
-
-  onFindWordsClick = () => {
-    // open up the find words thing
   }
 
   addGuess() {
@@ -92,7 +88,7 @@ class JottoHelper extends Component {
     const guesses = this.validGuesses()
 
     if (guesses.length == 0) {
-      this.setState({ words: [], found: [], eliminated: [] })
+      this.setState({ words: Words.all, found: [], eliminated: [] })
       return
     }
 
@@ -136,7 +132,6 @@ class JottoHelper extends Component {
       <>
         <div className="header">
           <h3>Jotto Helper</h3>
-          <a onClick={this.onFindWordsClick}>Find Words</a>
         </div>
 
         <DeductionContext.Provider value={{ found, eliminated }}>
@@ -148,7 +143,7 @@ class JottoHelper extends Component {
             </div>
           </div>
 
-          <WordSummary words={this.state.words} onClick={this.onWordClick} />
+          <WordSearch words={this.state.words} onClick={this.onWordClick} />
         </DeductionContext.Provider>
       </>
     )

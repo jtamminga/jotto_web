@@ -2,7 +2,7 @@ import { chunks, intersectLen } from './utils'
 
 class Words {
     constructor() {
-        this.words = this.getWords()
+        this.all = this.getWords()
     }
 
     makesSense(word, guess) {
@@ -15,7 +15,7 @@ class Words {
     }
 
     withGuesses(guesses) {
-        return this.words.filter(w =>
+        return this.all.filter(w =>
             guesses.every(g => this.makesSense(w, g)))
     }
 } 

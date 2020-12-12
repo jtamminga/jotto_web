@@ -1,5 +1,11 @@
 .alphabet {
+  $num-chars: 26;
+  $num-rows: 2;
+
   margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat($num-chars / $num-rows, 1fr);
+  gap: 6px;
 
   span {
     text-transform: uppercase;
@@ -7,11 +13,10 @@
     text-align: center;
     background-color: $default-color;
 
+    // making a circle
     border-radius: 20px;
     width: 22px;
     padding: 5px;
-    margin-bottom: 5px;
-    margin-right: 5px;
 
     &.found {
       background-color: $found-color;
