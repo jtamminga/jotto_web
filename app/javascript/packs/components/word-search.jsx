@@ -17,8 +17,12 @@ class WordSearch extends Component {
         this.setState({ notContains: e.target.value })
     }
 
-    onClick = () => {
+    onSearch = () => {
         this.setState({ showSearch: !this.state.showSearch })
+    }
+
+    onClear = () => {
+        this.setState({ contains: '', notContains: '' })
     }
 
     render() {
@@ -28,6 +32,7 @@ class WordSearch extends Component {
         const filtered = showSearch ?
             wordSearch(words, contains, notContains) : words
 
+        // get some random words to show
         const sampled = sample(filtered, 20)
 
         return (
@@ -37,21 +42,33 @@ class WordSearch extends Component {
                         numWords={words.length}
                         numFiltered={filtered.length}
                     />
-                    <span onClick={this.onClick}>Search</span>
+                    <div>
+                        { showSearch &&
+                            <span
+                                onClick={this.onClear}
+                                className="btn-label"
+                                style={{ marginRight: '0.5em' }}
+                            >Clear</span>
+                        }
+                        <span
+                            onClick={this.onSearch}
+                            className="btn-label"
+                        >Search</span>
+                    </div>
                 </div>
-                { this.state.showSearch &&
+                { showSearch &&
                     <div className="word-filter">
                         <div>
                             <input
-                                defaultValue={contains}
-                                onInput={this.onContainsInput}
+                                value={contains}
+                                onChange={this.onContainsInput}
                             />
                             <span>Contains</span>
                         </div>
                         <div>
                             <input
-                                defaultValue={notContains}
-                                onInput={this.onNotContainsInput}
+                                value={notContains}
+                                onChange={this.onNotContainsInput}
                             />
                             <span>Not Contains</span>
                         </div>
@@ -73,17 +90,13 @@ export function WordSummary({ numWords, numFiltered }) {
     if (isFiltered) {
         return (
             <span>
-                <span>{numFiltered}</span>
-                <span> of </span>
-                <span>{numWords}</span> possible
+                {numFiltered} of {numWords} possible
             </span>
         )
     }
 
     return (
-        <span>
-            <span>{numWords}</span> possible
-        </span>
+        <span>{numWords} possible</span>
     )
 }
 

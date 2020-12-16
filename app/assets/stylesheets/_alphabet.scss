@@ -18,6 +18,10 @@
     width: 22px;
     padding: 5px;
 
+    @include mobile {
+      width: auto;
+    }
+
     &.found {
       background-color: $found-color;
     }

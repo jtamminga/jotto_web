@@ -1,0 +1,9 @@
+.btn-label {
+    color: $text-muted;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+        color: darken($color: $text-muted, $amount: 20%);
+    }
+}
