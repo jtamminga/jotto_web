@@ -10,7 +10,7 @@ class Guess extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.word != this.props.word && wordValid(this.props.word)) {
+    if (prevProps.word !== this.props.word && wordValid(this.props.word)) {
       this.commonInput.current.focus()
     }
   }

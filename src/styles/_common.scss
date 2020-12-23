@@ -1,8 +1,13 @@
 input {
+  // fixes some weird width issues
+  // also cause lots of problems on iOS
+  padding: 0;
+  
   background: none;
   border: none;
   outline: none;
   border-bottom: 2px solid $border-color;
+  border-radius: 0; // for iOS
 
   font-family: monospace;
   text-transform: uppercase;

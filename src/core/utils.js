@@ -24,12 +24,12 @@ export function charClasses(char, found, eliminated) {
 
 export function duplicates(chars) {
   let hash = {}
-  for (var char of chars) {
+  for (let char of chars) {
     hash[char] = hash[char] === undefined ? 1 : hash[char] + 1
   }
 
   let dups = []
-  for (var char in hash) {
+  for (let char in hash) {
     if (hash[char] > 1) dups.push(char)
   }
 
@@ -37,7 +37,7 @@ export function duplicates(chars) {
 }
 
 export function wordValid(chars) {
-  return chars.length == 5 && duplicates(chars).length == 0
+  return chars.length === 5 && duplicates(chars).length === 0
 }
 
 export function chunks(str, len) {
@@ -51,7 +51,7 @@ export function chunks(str, len) {
 }
 
 export function superset(a, b) {
-  return intersectLen(a, b) == b.length
+  return intersectLen(a, b) === b.length
 }
 
 export function intersectLen(a, b) {
@@ -77,5 +77,5 @@ export function union(a, b) {
 
 export function wordSearch(words, contains, notContains) {
   return words.filter(word =>
-    superset(word, contains) && intersectLen(word, notContains) == 0)
+    superset(word, contains) && intersectLen(word, notContains) === 0)
 }

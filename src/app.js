@@ -21,7 +21,7 @@ class JottoHelper extends Component {
   }
 
   onGuessRemove = (id) => {
-    let guesses = this.state.guesses.filter(g => id != g.id)
+    let guesses = this.state.guesses.filter(g => id !== g.id)
     this.setState({ guesses }, this.getData)
   }
 
@@ -47,7 +47,7 @@ class JottoHelper extends Component {
 
   updateGuess(id, guess) {
     let guesses = this.state.guesses.map(g => {
-      if (g.id != id) return g
+      if (g.id !== id) return g
 
       let updated = { ...g, ...guess }
       return { ...updated, isNew: !this.validGuess(updated) }
@@ -61,7 +61,7 @@ class JottoHelper extends Component {
   }
 
   validGuess(guess) {
-    return guess.word.length == 5
+    return guess.word.length === 5
       && guess.common !== null
       && guess.common >= 0
       && guess.common <= 5
@@ -74,7 +74,7 @@ class JottoHelper extends Component {
   }
 
   guessesMatch(preGuesses, curGuesses) {
-    if (preGuesses.length != curGuesses.length) return false
+    if (preGuesses.length !== curGuesses.length) return false
 
     let result = true
     for (let i = 0; i < preGuesses.length; i++) {
@@ -88,7 +88,7 @@ class JottoHelper extends Component {
   getData() {
     const guesses = this.validGuesses()
 
-    if (guesses.length == 0) {
+    if (guesses.length === 0) {
       this.setState({ words: Words.all, found: [], eliminated: [] })
       return
     }

@@ -9,7 +9,7 @@ class CharInput extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.state.isFocused
-        && prevProps.word != this.props.word
+        && prevProps.word !== this.props.word
         && wordValid(this.props.word)) {
       this.setState({ isFocused: false })
     }

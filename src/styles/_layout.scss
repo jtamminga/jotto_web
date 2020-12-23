@@ -1,21 +1,15 @@
-@mixin mobile {
-  @media (max-width: 500px) {
-    @content
-  }
-}
-
 body {
   padding: 0;
   margin: 0;
   background-color: $background-color;
-
+  
   display: flex;
   justify-content: center;
-
+  
   & > div {
     width: 494px; // same width as alphabet component
-    margin: 5px;  // for mobile
-
+    margin: 10px;  // for mobile
+    
     .guesses-container {
       display: flex;
       justify-content: center;
