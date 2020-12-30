@@ -1,20 +1,33 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import WordList from './word-list'
-import { wordSearch, sample } from '../core/utils'
+import { wordSearch, sample, arrayEqual } from '../core/utils'
 
-class WordSearch extends Component {
+class WordSearch extends PureComponent {
     state = {
         showSearch: false,
         contains: '',
         notContains: ''
     }
 
+    // for performance reasons
+    searchCache = {
+        words: [],
+        contains: '',
+        notContains: '',
+        filtered: []
+    }
+
+    sampleCache = {
+        filtered: [],
+        sampled: []
+    }
+
     onContainsInput = (e) => {
-        this.setState({ contains: e.target.value })
+        this.setState({ contains: e.target.value.toLowerCase() })
     }
 
     onNotContainsInput = (e) => {
-        this.setState({ notContains: e.target.value })
+        this.setState({ notContains: e.target.value.toLowerCase() })
     }
 
     onSearch = () => {
@@ -25,15 +38,39 @@ class WordSearch extends Component {
         this.setState({ contains: '', notContains: '' })
     }
 
+    search(words, contains, notContains) {
+        if (this.searchCache.contains === contains
+                && this.searchCache.notContains === notContains
+                && arrayEqual(this.searchCache.words, words)) {
+            return this.searchCache.filtered
+        }
+
+        this.searchCache.words = words
+        this.searchCache.contains = contains
+        this.searchCache.notContains = notContains
+        this.searchCache.filtered = wordSearch(words, contains, notContains)
+        return this.searchCache.filtered
+    }
+
+    sample(filtered) {
+        if (arrayEqual(this.sampleCache.filtered, filtered)) {
+            return this.sampleCache.sampled
+        }
+
+        this.sampleCache.filtered = filtered
+        this.sampleCache.sampled = sample(filtered, 20)
+        return this.sampleCache.sampled
+    }
+
     render() {
         const { words, onClick } = this.props
         const { showSearch, contains, notContains } = this.state
 
         const filtered = showSearch ?
-            wordSearch(words, contains, notContains) : words
+            this.search(words, contains, notContains) : words
 
         // get some random words to show
-        const sampled = sample(filtered, 20)
+        const sampled = this.sample(filtered)
 
         return (
             <div className="word-search">

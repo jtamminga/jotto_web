@@ -3,6 +3,11 @@
   display: flex;
   flex-wrap: wrap;
 
+  // fit a few more words on mobile
+  @include mobile {
+    font-size: 0.9em;
+  }
+
   .word {
     margin-right: 8px;
     margin-bottom: 12px;

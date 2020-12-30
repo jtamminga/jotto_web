@@ -6,7 +6,7 @@ class Words {
     }
 
     makesSense(word, guess) {
-        return intersectLen(word, guess.word) == guess.common
+        return intersectLen(word, guess.word) === guess.common
     }
 
     getWords() {

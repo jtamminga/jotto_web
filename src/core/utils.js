@@ -79,3 +79,10 @@ export function wordSearch(words, contains, notContains) {
   return words.filter(word =>
     superset(word, contains) && intersectLen(word, notContains) === 0)
 }
+
+export function arrayEqual(a, b) {
+  if (a.length !== b.length) return false
+
+  let sorted = a.slice().sort()
+  return b.slice().sort().every((item, index) => item === sorted[index])
+}

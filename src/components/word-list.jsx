@@ -1,7 +1,8 @@
 import React from 'react'
+import { arrayEqual } from '../core/utils'
 import Word from './word'
 
-export default function WordList({ words, onClick }) {
+export default React.memo(function WordList({ words, onClick }) {
     return (
         <div className="words">
         { words.map((word, i) =>
@@ -9,4 +10,4 @@ export default function WordList({ words, onClick }) {
         )}
         </div>
     )
-}
+}, (pre, next) => arrayEqual(pre.words, next.words))

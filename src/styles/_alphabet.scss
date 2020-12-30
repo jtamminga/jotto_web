@@ -25,6 +25,7 @@
     // this will compact the circles a bit on mobile
     @include mobile {
       width: auto;
+      font-size: 0.9em;
     }
 
     &.found {

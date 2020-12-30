@@ -51,6 +51,7 @@ class CharInput extends Component {
             defaultValue={word}
             onChange={this.onChange}
             onBlur={this.onBlur}
+            maxLength={5}
             { ...props }/>
 
             :

@@ -33,4 +33,11 @@ input {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @include mobile {
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0.75em;
+    }
+  }
 }

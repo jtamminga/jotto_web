@@ -132,7 +132,7 @@ class JottoHelper extends Component {
     return (
       <>
         <div className="header">
-          <h3>Jotto Helper</h3>
+          <h3>Five Letter Helper</h3>
         </div>
 
         <DeductionContext.Provider value={{ found, eliminated }}>
