@@ -86,3 +86,7 @@ export function arrayEqual(a, b) {
   let sorted = a.slice().sort()
   return b.slice().sort().every((item, index) => item === sorted[index])
 }
+
+export function hasError(guess) {
+  return guess.wordShort || guess.doubleLetter || guess.badNumber
+}

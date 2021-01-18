@@ -6,3 +6,7 @@ $found-color: #a3d5a3;
 $eliminated-color: #ffafaf;
 
 $text-muted: #6c6c6c; // AA (contrast ratio of 4.5:1)
+
+$error-color: #ff8c8c;
+$border-color-error: $error-color;
+$text-error: darken($color: $error-color, $amount: 5%);

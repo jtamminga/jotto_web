@@ -1,8 +1,15 @@
 import React, { PureComponent } from 'react'
-import CharInput from './char-input'
-import { wordValid } from '../core/utils'
+import WordInput from './word-input'
+import CommonInput from './common-input'
+import { hasError } from '../core/utils'
 
 class Guess extends PureComponent {
+
+  state = {
+    isWordFocused: true,
+    isCommonFocused: false,
+    isCommonTouched: false
+  }
 
   constructor(props) {
     super(props)
@@ -10,47 +17,110 @@ class Guess extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.word !== this.props.word && wordValid(this.props.word)) {
+    const { word, wordShort, doubleLetter } = this.props
+    const isWordValid = !wordShort && !doubleLetter
+
+    if (prevProps.word !== word && isWordValid) {
       this.commonInput.current.focus()
     }
   }
 
   onWordChange = (word) => {
-    this.commonInput.current.focus()
-    this.props.onWordChange(word)
+    this.props.onGuessChange({ word })
   }
 
-  onCommonChange = (e) => {
-    let common = parseInt(e.target.value)
-    if (this.isCommonValid(common)) {
-      this.props.onCommonChange(common)
+  onWordFocus = () => {
+    this.setState({ isWordFocused: true })
+  }
+
+  onWordBlur = () => {
+    this.setState({ isWordFocused: false })
+  }
+
+  onCommonChange = (common) => {
+    this.props.onGuessChange({ common })
+  }
+
+  onCommonFocus = () => {
+    this.setState({ isCommonFocused: true, isCommonTouched: true })
+  }
+
+  onCommonBlur = () => {
+    this.setState({ isCommonFocused: false })
+  }
+
+  wordErrors() {
+    const { word, wordShort, doubleLetter } = this.props
+    const { isWordFocused } = this.state
+    const errors = []
+
+    if (word === '')
+      return []
+
+    if (doubleLetter) {
+      errors.push('Words cannot have a double letter')
+      return errors
     }
+
+    if (wordShort && !isWordFocused)
+      errors.push('Please put in a 5 letter word')
+
+    return errors
   }
 
-  isCommonValid(value) {
-    return value >= 0 && value <= 5
+  commonErrors() {
+    const { common, badNumber } = this.props
+    const { isCommonTouched, isCommonFocused } = this.state
+    const errors = []
+
+    if (common === '')
+      return []
+
+    if (badNumber)
+      errors.push('Numbers need to be between 0 and 5')
+
+    return errors
   }
 
   render() {
+    const { word, common, isNew, onRemove } = this.props
+    const { isWordFocused } = this.state
+
+    const fadeWord = hasError(this.props)
+    const wordErrors = this.wordErrors()
+    const commonErrors = this.commonErrors()
+
     return (
       <div className="guess">
+        <div className="guess-input">
+          <WordInput
+            word={word}
+            onWordChange={this.onWordChange}
+            onFocus={this.onWordFocus}
+            onBlur={this.onWordBlur}
+            isFocused={isWordFocused}
+            isFaded={fadeWord}
+            hasError={wordErrors.length > 0}
+          />
 
-        <CharInput
-          className="word"
-          word={this.props.word}
-          onWordChange={this.onWordChange} />
+          <CommonInput
+            ref={this.commonInput}
+            common={common}
+            onCommonChange={this.onCommonChange}
+            onFocus={this.onCommonFocus}
+            onBlur={this.onCommonBlur}
+            hasError={commonErrors.length > 0}
+          />
+        </div>
 
-        <input
-          type="number"
-          className="common"
-          defaultValue={this.props.isNew ? '' : this.props.common}
-          onChange={this.onCommonChange}
-          ref={this.commonInput}
-          min="0"
-          max="5" />
+        <div className="guess-errors">
+          { [...wordErrors, ...commonErrors].map((error, i) =>
+            <div key={i}>{error}</div>
+          )}
+        </div>
 
-        { !this.props.isNew &&
-          <div className="remove" onClick={this.props.onRemove}></div>
+        { !isNew &&
+          <div className="remove" onClick={onRemove}></div>
         }
       </div>
     )
