@@ -21,6 +21,11 @@ class JottoHelper extends Component {
     eliminated: []
   }
 
+  // need to clean this up
+  // why is getdata called after setting state
+  //   - probably not needed any more, now that not async
+  // onWordClick not dry
+
   onGuessRemove = (id) => {
     let guesses = this.state.guesses.filter(g => id !== g.id)
     this.setState({ guesses }, this.getData)
@@ -33,6 +38,10 @@ class JottoHelper extends Component {
     const errors = this.validGuess(updated)
     let guesses = [ ...a, { ...updated, ...errors } ]
 
+    if (guesses.every(g => !hasError(g))) {
+      guesses.push(this.addGuess())
+    }
+
     this.setState({ guesses })
   }
 
@@ -41,8 +50,8 @@ class JottoHelper extends Component {
       id: window.id++,
       word: '',
       common: '', // empty string because can't have null
-      isNew: true,
 
+      invalidChar: false,
       wordShort: true,
       doubleLetter: false,
       badNumber: true
@@ -55,10 +64,10 @@ class JottoHelper extends Component {
 
       const updated = { ...g, ...guess }
       const errors = this.validGuess(updated)
-      return { ...updated, ...errors, isNew: hasError(errors) }
+      return { ...updated, ...errors }
     })
 
-    if (guesses.every(g => !g.isNew && !hasError(g))) {
+    if (guesses.every(g => !hasError(g))) {
       guesses.push(this.addGuess())
     }
 
@@ -67,6 +76,7 @@ class JottoHelper extends Component {
 
   validGuess({ word, common }) {
     return {
+      invalidChar: !/^[a-z]*$/.test(word),
       wordShort: word.length !== 5,
       doubleLetter: duplicates(word).length > 0,
       badNumber: common === '' || common < 0 || common > 5
@@ -75,7 +85,7 @@ class JottoHelper extends Component {
 
   validGuesses() {
     return this.state.guesses
-      .filter(g => !g.isNew && !hasError(g))
+      .filter(g => !hasError(g))
       .map(g => ({ word: g.word, common: g.common }))
   }
 
@@ -107,12 +117,6 @@ class JottoHelper extends Component {
     let words = Words.withGuesses(guesses)
     let { found, eliminated } = analyzer(words)
 
-    // console.groupCollapsed('analyst info')
-    // console.log('num words', words.length)
-    // console.log('found', found)
-    // console.log('eliminated', eliminated)
-    // console.groupEnd()
-
     this.setState({
       search: guesses,
       words,
@@ -122,11 +126,12 @@ class JottoHelper extends Component {
   }
 
   renderGuesses(guesses) {
-    return guesses.map(guess =>
+    return guesses.map((guess, i) =>
       <Guess
         key={guess.id}
         onGuessChange={this.updateGuess.bind(this, guess.id)}
         onRemove={this.onGuessRemove.bind(this, guess.id)}
+        isNew={i === guesses.length - 1}
         {...guess} />
     )
   }

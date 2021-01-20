@@ -17,8 +17,8 @@ class Guess extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { word, wordShort, doubleLetter } = this.props
-    const isWordValid = !wordShort && !doubleLetter
+    const { word, wordShort, doubleLetter, invalidChar } = this.props
+    const isWordValid = !wordShort && !doubleLetter && !invalidChar
 
     if (prevProps.word !== word && isWordValid) {
       this.commonInput.current.focus()
@@ -50,34 +50,40 @@ class Guess extends PureComponent {
   }
 
   wordErrors() {
-    const { word, wordShort, doubleLetter } = this.props
+    const { word, wordShort, doubleLetter, invalidChar } = this.props
     const { isWordFocused } = this.state
     const errors = []
 
     if (word === '')
       return []
 
+    if (invalidChar) {
+      errors.push('Word can only contain letters')
+      return errors
+    }
+
     if (doubleLetter) {
-      errors.push('Words cannot have a double letter')
+      errors.push('Word cannot have a double letter')
       return errors
     }
 
     if (wordShort && !isWordFocused)
-      errors.push('Please put in a 5 letter word')
+      errors.push('Word must be a 5 letter word')
 
     return errors
   }
 
   commonErrors() {
     const { common, badNumber } = this.props
-    const { isCommonTouched, isCommonFocused } = this.state
+    // maybe just get rid of these states
+    // const { isCommonTouched, isCommonFocused } = this.state
     const errors = []
 
     if (common === '')
       return []
 
     if (badNumber)
-      errors.push('Numbers need to be between 0 and 5')
+      errors.push('Number must be between 0 and 5')
 
     return errors
   }
@@ -111,6 +117,10 @@ class Guess extends PureComponent {
             onBlur={this.onCommonBlur}
             hasError={commonErrors.length > 0}
           />
+
+          { !isNew &&
+            <div className="remove" onClick={onRemove}></div>
+          }
         </div>
 
         <div className="guess-errors">
@@ -118,10 +128,6 @@ class Guess extends PureComponent {
             <div key={i}>{error}</div>
           )}
         </div>
-
-        { !isNew &&
-          <div className="remove" onClick={onRemove}></div>
-        }
       </div>
     )
   }

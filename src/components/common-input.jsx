@@ -6,14 +6,14 @@ class CommonInput extends PureComponent {
     super(props)
     this.input = React.createRef()
   }
+
+  focus() {
+    this.input.current.focus()
+  }
   
   onChange = (e) => {
     let common = e.target.value === '' ? '' : parseInt(e.target.value)
     this.props.onCommonChange(common)
-  }
-
-  focus() {
-    this.input.current.focus()
   }
   
   render () {
@@ -31,6 +31,8 @@ class CommonInput extends PureComponent {
         onChange={this.onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        min={0}
+        max={5}
       />
     )
   }
