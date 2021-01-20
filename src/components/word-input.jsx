@@ -1,16 +1,12 @@
 import React, { PureComponent } from 'react'
 import { DeductionContext } from '../core/deduction-context'
-import { wordValid, charClasses } from '../core/utils'
+import { charClasses } from '../core/utils'
 
 class WordInput extends PureComponent {
 
   onChange = (e) => {
     const word = e.target.value.toLowerCase()
     this.props.onWordChange(word)
-  }
-
-  toChars(word) {
-    return word.split('')
   }
 
   render() {
@@ -54,7 +50,7 @@ class WordInput extends PureComponent {
           :
 
           <div className={wordClasses.join(' ')} onClick={onFocus}>
-            { this.toChars(word).map((char, i) =>
+            { word.split('').map((char, i) =>
               <span key={i} className={charClasses(char, found, eliminated)}>
                 {char}
               </span>

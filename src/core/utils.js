@@ -36,10 +36,6 @@ export function duplicates(chars) {
   return dups
 }
 
-export function wordValid(chars) {
-  return chars.length === 5 && duplicates(chars).length === 0
-}
-
 export function chunks(str, len) {
   let chunks = []
 
@@ -88,5 +84,5 @@ export function arrayEqual(a, b) {
 }
 
 export function hasError(guess) {
-  return guess.wordShort || guess.doubleLetter || guess.badNumber
+  return guess.invalidChar || guess.wordShort || guess.doubleLetter || guess.badNumber
 }
