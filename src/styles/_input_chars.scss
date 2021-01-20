@@ -1,6 +1,11 @@
 .input-chars {
   display: flex;
   justify-content: center;
+  cursor: pointer;
+
+  &.faded {
+    opacity: 0.4;
+  }
 
   & > span {
     background-color: $default-color;

@@ -1,42 +1,59 @@
 .guess {
-  position: relative;
-  display: flex;
   margin-bottom: 15px;
-  // height: 50px;
 
-  .word {
-    width: 200px;
-    margin-right: 20px;
-  }
+  .guess-input {
+    position: relative;
+    display: flex;
+    // height: 50px;
 
-  .common {
-    width: 50px;
-    margin-right: 50px; // space for the remove button
-  }
+    .word {
+      width: 200px;
+      margin-right: 20px;
+    }
 
-  .remove {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    right: 0;
-    bottom: 5px;
-    cursor: pointer;
+    .common {
+      width: 50px;
+      margin-right: 50px; // space for the remove button
+    }
 
-    &::before, &::after {
-      content: '';
+    .remove {
       position: absolute;
-      width: 80%;
-      height: 2px;
-      background-color: $border-color;
-      top: 50%;
-    }
+      width: 32px;
+      height: 32px;
+      right: 0;
+      bottom: 5px;
+      cursor: pointer;
 
-    &::before {
-      transform: rotate(45deg);
-    }
+      &::before, &::after {
+        content: '';
+        position: absolute;
+        width: 80%;
+        height: 2px;
+        background-color: $border-color;
+        top: 50%;
+      }
 
-    &::after {
-      transform: rotate(-45deg);
+      &::before {
+        transform: rotate(45deg);
+      }
+
+      &::after {
+        transform: rotate(-45deg);
+      }
     }
+  }
+
+  .guess-errors:not(:empty) {
+    position: absolute;
+    background-color: $error-color;
+    padding: 3px;
+    border-radius: 5px;
+    color: white;
+    width: fit-content;
+    margin-top: 5px;
+    z-index: 10;
+    opacity: 80%;
+    pointer-events: none;
+    box-shadow: 0 3px 8px rgba($color: #000000, $alpha: .1);
   }
 }

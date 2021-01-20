@@ -5,6 +5,7 @@ import Alphabet from './components/alphabet'
 import Words from './core/words'
 import analyzer from './core/analyzer'
 import WordSearch from './components/word-search'
+import { duplicates, hasError } from './core/utils'
 import './styles/app.scss'
 
 window.id = 1;
@@ -14,8 +15,8 @@ class JottoHelper extends Component {
     loading: false,
     guesses: [this.addGuess()],
 
-    search: [],
     words: Words.all,
+    search: [],
     found: [],
     eliminated: []
   }
@@ -25,51 +26,56 @@ class JottoHelper extends Component {
     this.setState({ guesses }, this.getData)
   }
 
-  onWordChange = (id, word) => {
-    this.updateGuess(id, { word })
-  }
-
-  onCommonChange = (id, common) => {
-    this.updateGuess(id, { common })
-  }
-
   onWordClick = (word) => {
     let a = this.state.guesses.slice(0, -1)
     let b = this.state.guesses.slice(-1)[0]
-    let guesses = [ ...a, { ...b, word } ]
+    const updated = { ...b, word }
+    const errors = this.validGuess(updated)
+    let guesses = [ ...a, { ...updated, ...errors } ]
 
     this.setState({ guesses })
   }
 
   addGuess() {
-    return { id: window.id++, word: '', common: null, isNew: true }
+    return {
+      id: window.id++,
+      word: '',
+      common: '', // empty string because can't have null
+      isNew: true,
+
+      wordShort: true,
+      doubleLetter: false,
+      badNumber: true
+    }
   }
 
   updateGuess(id, guess) {
-    let guesses = this.state.guesses.map(g => {
+    const guesses = this.state.guesses.map(g => {
       if (g.id !== id) return g
 
-      let updated = { ...g, ...guess }
-      return { ...updated, isNew: !this.validGuess(updated) }
+      const updated = { ...g, ...guess }
+      const errors = this.validGuess(updated)
+      return { ...updated, ...errors, isNew: hasError(errors) }
     })
 
-    if (guesses.every(g => this.validGuess(g))) {
+    if (guesses.every(g => !g.isNew && !hasError(g))) {
       guesses.push(this.addGuess())
     }
 
     this.setState({ guesses }, this.getData)
   }
 
-  validGuess(guess) {
-    return guess.word.length === 5
-      && guess.common !== null
-      && guess.common >= 0
-      && guess.common <= 5
+  validGuess({ word, common }) {
+    return {
+      wordShort: word.length !== 5,
+      doubleLetter: duplicates(word).length > 0,
+      badNumber: common === '' || common < 0 || common > 5
+    }
   }
 
   validGuesses() {
     return this.state.guesses
-      .filter(g => !g.isNew && this.validGuess(g))
+      .filter(g => !g.isNew && !hasError(g))
       .map(g => ({ word: g.word, common: g.common }))
   }
 
@@ -101,11 +107,11 @@ class JottoHelper extends Component {
     let words = Words.withGuesses(guesses)
     let { found, eliminated } = analyzer(words)
 
-    console.groupCollapsed('analyst info')
-    console.log('num words', words.length)
-    console.log('found', found)
-    console.log('eliminated', eliminated)
-    console.groupEnd()
+    // console.groupCollapsed('analyst info')
+    // console.log('num words', words.length)
+    // console.log('found', found)
+    // console.log('eliminated', eliminated)
+    // console.groupEnd()
 
     this.setState({
       search: guesses,
@@ -116,11 +122,10 @@ class JottoHelper extends Component {
   }
 
   renderGuesses(guesses) {
-    return guesses.map((guess, i) =>
+    return guesses.map(guess =>
       <Guess
         key={guess.id}
-        onWordChange={this.onWordChange.bind(this, guess.id)}
-        onCommonChange={this.onCommonChange.bind(this, guess.id)}
+        onGuessChange={this.updateGuess.bind(this, guess.id)}
         onRemove={this.onGuessRemove.bind(this, guess.id)}
         {...guess} />
     )
