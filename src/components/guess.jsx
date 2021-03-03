@@ -4,7 +4,6 @@ import CommonInput from './common-input'
 import { hasError } from '../core/utils'
 
 class Guess extends PureComponent {
-
   state = {
     isWordFocused: true,
     isCommonFocused: false,

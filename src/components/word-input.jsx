@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { DeductionContext } from '../core/deduction-context'
+import { DeductionContext } from '../core/context'
 import { charClasses } from '../core/utils'
 
 class WordInput extends PureComponent {
