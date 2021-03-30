@@ -1,3 +1,5 @@
+$button-color: #ddd;
+
 .btn-label {
     color: $text-muted;
     text-decoration: underline;
@@ -5,5 +7,23 @@
 
     &:hover {
         color: darken($color: $text-muted, $amount: 20%);
+    }
+}
+
+.btn {
+    background-color: $button-color;
+    color: $text-muted;
+    padding: 0.5em;
+    font-size: 1.2em;
+    cursor: pointer;
+    border: none;
+    outline: none;
+
+    &:hover {
+        background-color: darken($button-color, 3%);
+    }
+
+    &:disabled {
+        background-color: lighten($button-color, 3%);
     }
 }

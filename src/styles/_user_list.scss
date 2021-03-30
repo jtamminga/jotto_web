@@ -1,0 +1,19 @@
+$status-size: 12px;
+
+.user-list {
+  .user {
+    display: flex;
+    align-items: center;
+    .status {
+      width: $status-size;
+      height: $status-size;
+      border-radius: $status-size;
+      background-color: $error-color;
+      margin-right: 10px;
+
+      &.connected {
+        background-color: $success-color;
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@ import Words from './core/words'
 import analyzer from './core/analyzer'
 import WordSearch from './components/word-search'
 import { duplicates, hasError } from './core/utils'
-import './styles/app.scss'
+// import './styles/app.scss'
 
 class Helper extends Component {
   constructor(props) {

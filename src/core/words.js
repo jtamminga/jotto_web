@@ -1,4 +1,4 @@
-import { chunks, intersectLen } from './utils'
+import { chunks, numIntersect } from './utils'
 
 class Words {
     constructor() {
@@ -6,7 +6,7 @@ class Words {
     }
 
     makesSense(word, guess) {
-        return intersectLen(word, guess.word) === guess.common
+        return numIntersect(word, guess.word) === guess.common
     }
 
     getWords() {
