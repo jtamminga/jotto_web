@@ -9,6 +9,7 @@ type Props = {
   users: User[];
   playerOrder: string[];
   word: string;
+  initialGuesses: OnlineGuess[],
   onUpdateUser: (user: Partial<User>) => void,
   onGameOver: () => void
 }
@@ -29,16 +30,18 @@ class InGame extends Component<Props, State> {
     this.id = 0;
     this.guessId = 0;
 
+    let guesses = props.initialGuesses.length > 0 ?
+      props.initialGuesses : [this.addGuess()];
+
     this.state = {
       currentTurn: props.playerOrder[0],
-      guesses: [this.addGuess()],
+      guesses,
       history: [],
       hasWon: false
     };
   }
 
   componentDidMount() {
-    console.log('ingame mounted');
     socket.on('turn', this.onTurn);
   }
 
@@ -154,7 +157,7 @@ class InGame extends Component<Props, State> {
     });
   }
 
-  submitGuess(guess: OnlineGuess): void {
+  submitGuess(guess: OnlineGuess): void {    
     const guesses = this.updateGuess(guess.id, { submitted: true });
     socket.emit('submit_guess', guess.word);
 

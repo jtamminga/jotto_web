@@ -4,7 +4,7 @@ import Word from './components/game/word';
 import InGame from './components/game/in-game';
 import EndGameSummary from './components/game/game-summary';
 import socket, { updateSocketAuth } from './socket';
-import { User } from './core/types';
+import { OnlineGuess, User, GameState } from './core/types';
 import './styles/app-online.scss'
 
 type State = {
@@ -15,7 +15,8 @@ type State = {
   users: User[];
   playerOrder: string[];
   word: string;
-  gameSummary: GameSummary[]
+  gameSummary: GameSummary[],
+  guesses: OnlineGuess[]
 }
 
 class Game extends Component<{}, State> {
@@ -27,7 +28,8 @@ class Game extends Component<{}, State> {
     users: [],
     playerOrder: [],
     word: '',
-    gameSummary: []
+    gameSummary: [],
+    guesses: []
   }
 
   componentDidMount() {
@@ -39,8 +41,6 @@ class Game extends Component<{}, State> {
     }
 
     socket.on('session', ({ sessionId, userId }: SocketSession) => {
-      console.log('got socket info');
-
       // use for authentication from now on
       updateSocketAuth({ sessionId });
 
@@ -50,6 +50,16 @@ class Game extends Component<{}, State> {
       socket.userId = userId
 
       this.setState({ connected: true });
+    });
+
+    socket.on('restore_state', (gameState: SocketGameState) => {
+      this.setState({
+        gameState: gameState.state,
+        users: gameState.users,
+        word: gameState.word,
+        guesses: gameState.guesses,
+        playerOrder: gameState.playerOrder
+      })
     });
 
     socket.on('users', (users: User[]) => {
@@ -132,7 +142,7 @@ class Game extends Component<{}, State> {
   }
 
   onWordSubmit = () => {
-    console.log('emit: ', this.state.word);
+    console.log('submit_word');
     socket.emit('submit_word', this.state.word);
     this.updateUser({ userId: socket.userId, ready: true });
     this.setState({ waiting: true });
@@ -143,8 +153,6 @@ class Game extends Component<{}, State> {
       .findIndex(u => u.userId === user.userId);
 
     if (index === -1) {
-      console.log('incoming new user', user);
-
       // set defaults just in case
       const newUser: User = {
         userId: '',
@@ -155,8 +163,6 @@ class Game extends Component<{}, State> {
         won: false,
         ...user
       };
-
-      console.log('new user', newUser);
 
       this.setState(state => {
         return { users: [...state.users, newUser] };
@@ -177,7 +183,8 @@ class Game extends Component<{}, State> {
       username,
       word,
       playerOrder,
-      gameSummary
+      gameSummary,
+      guesses
     } = this.state;
 
     switch (gameState) {
@@ -209,6 +216,7 @@ class Game extends Component<{}, State> {
             users={users}
             word={word}
             playerOrder={playerOrder}
+            initialGuesses={guesses}
             onUpdateUser={this.updateUser.bind(this)}
             onGameOver={() => console.log('game over!')}
           />
@@ -232,13 +240,6 @@ class Game extends Component<{}, State> {
 
 export const SessionContext = React.createContext<Context>({ userId: undefined });
 
-enum GameState {
-  PICK_USERNAME,
-  PICK_WORD,
-  START,
-  GAME_OVER
-}
-
 type Context = {
   userId: string | undefined;
 }
@@ -251,6 +252,15 @@ type SocketSession = {
 type SocketGameStart = {
   nextPlayer: string;
   playerOrder: string[];
+}
+
+type SocketGameState = {
+  state: GameState,
+  currentTurn: string;
+  guesses: OnlineGuess[];
+  playerOrder: string[];
+  users: User[];
+  word: string;
 }
 
 export interface GameSummary {

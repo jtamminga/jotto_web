@@ -4,6 +4,13 @@ export interface WordError {
   doubleLetter: boolean;
 }
 
+export enum GameState {
+  PICK_USERNAME,
+  PICK_WORD,
+  START,
+  GAME_OVER
+}
+
 export interface Guess {
   id: number;
   word: string;

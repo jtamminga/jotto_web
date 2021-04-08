@@ -16,7 +16,7 @@ let socket: JottoSocket = io(URL, { autoConnect: false });
 
 // log everything
 socket.onAny((event, ...args) => {
-  console.log(event, args);
+  console.log(event, ...args);
 });
 
 /**
