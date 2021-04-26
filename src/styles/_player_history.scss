@@ -1,0 +1,55 @@
+$padding: 3px 5px;
+$border-radius: 3px;
+$player-color: $found-color;
+$opponent-color: $eliminated-color;
+$guess-color: white;
+
+.player-history {
+  display: flex;
+  margin-bottom: 15px;
+  overflow-x: scroll;
+  // direction: rtl;
+
+  .player-history-item {
+    height: 1.5em;
+    display: flex;
+    margin-right: 5px;
+    text-transform: uppercase;
+
+    .player {
+      position: relative;
+      padding: $padding;
+      background-color: $player-color;
+
+      border-top-left-radius: $border-radius;
+      border-bottom-left-radius: $border-radius;
+    }
+
+    .arrow {
+      height: 100%;
+      fill: $player-color;
+      background-color: $opponent-color;
+    }
+
+    .opponent {
+      padding: $padding;
+      background-color: $opponent-color;
+      padding-left: 3px;
+    }
+
+    .word {
+      padding: $padding;
+      background-color: $guess-color;
+    }
+
+    .common {
+      padding: $padding;
+      padding-left: 0;
+      color: $text-muted;
+      background-color: $guess-color;
+
+      border-top-right-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+    }
+  }
+}

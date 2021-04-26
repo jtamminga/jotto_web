@@ -9,5 +9,9 @@ $text-muted: #6c6c6c; // AA (contrast ratio of 4.5:1)
 
 $error-color: #ff8c8c;
 $success-color: #7fc341;
+$warning-color: orange;
 $border-color-error: $error-color;
+
+$text-success: darken($color: $success-color, $amount: 10%);
 $text-error: darken($color: $error-color, $amount: 5%);
+$text-warning: darken($color: $warning-color, $amount: 10%);

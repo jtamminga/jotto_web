@@ -1,5 +1,5 @@
-import React from 'react';
 import { User } from '../../core/types';
+import UserConnected from './user-ready'
 
 type Props = {
   word: string;
@@ -18,22 +18,28 @@ export default function Word({
 }: Props) {
   return (
     <div className="container-narrow">
-      <div className="mb">
+      <div className="d-flex mb">
         <input
           placeholder="Enter Word"
           disabled={waiting}
           value={word}
           onChange={e => onChange(e.target.value)}
         />
+
+        <button
+          className="btn ml"
+          onClick={onSubmit}
+          disabled={waiting}
+          style={{ width: 150 }}
+        >
+          { waiting ? 'Waiting...' : 'Ready' }
+        </button>
       </div>
       <div className="user-list">
         { users.map((user, i) =>
-          <div key={i}>{user.username} ({user.ready ? 'connected' : 'disconnected'})</div>
+          <UserConnected key={i} {...user} />
         )}
       </div>
-      <button className="btn" onClick={onSubmit} disabled={waiting}>
-        { waiting ? 'Waiting...' : 'Ready' }
-      </button>
     </div>
   );
 }

@@ -15,10 +15,6 @@ body {
   & > div {
     width: 494px; // same width as alphabet component
     margin: 5px;  // for mobile
-
-    .container-narrow {
-      padding: 50px;
-    } 
     
     .guesses-container {
       display: flex;
@@ -38,4 +34,8 @@ body {
       margin-bottom: 0.75em;
     }
   }
+}
+
+.container-narrow {
+  padding: 50px;
 }

@@ -4,7 +4,7 @@ import Word from './components/game/word';
 import InGame from './components/game/in-game';
 import EndGameSummary from './components/game/game-summary';
 import socket, { updateSocketAuth } from './socket';
-import { OnlineGuess, User, GameState } from './core/types';
+import { OnlineGuess, User, GameState, PlayerTurn } from './core/types';
 import './styles/app-online.scss'
 
 type State = {
@@ -16,7 +16,7 @@ type State = {
   playerOrder: string[];
   word: string;
   gameSummary: GameSummary[],
-  guesses: OnlineGuess[]
+  history: PlayerTurn[]
 }
 
 class Game extends Component<{}, State> {
@@ -29,7 +29,7 @@ class Game extends Component<{}, State> {
     playerOrder: [],
     word: '',
     gameSummary: [],
-    guesses: []
+    history: []
   }
 
   componentDidMount() {
@@ -53,12 +53,28 @@ class Game extends Component<{}, State> {
     });
 
     socket.on('restore_state', (gameState: SocketGameState) => {
+      const getUsername = (userId: string) => {
+        const user = gameState.users.find(user => user.userId === userId);
+        if (!user) throw new Error('Cannot find user');
+        return user.username;
+      }
+
+      // transform data
+      const history: PlayerTurn[] = gameState.history.map(turn => ({
+        playerId: turn.from,
+        playerName: getUsername(turn.from),
+        opponentId: turn.to,
+        opponentName: getUsername(turn.to),
+        word: turn.word,
+        common: turn.common
+      }));
+
       this.setState({
         gameState: gameState.state,
         users: gameState.users,
         word: gameState.word,
-        guesses: gameState.guesses,
-        playerOrder: gameState.playerOrder
+        playerOrder: gameState.playerOrder,
+        history
       })
     });
 
@@ -118,13 +134,7 @@ class Game extends Component<{}, State> {
   }
 
   componentWillUnmount() {
-    socket.off('session');
-    socket.off('connect_error');
-    socket.off('users');
-    socket.off('user_connect');
-    socket.off('user_disconnect');
-    socket.off('word_picking');
-    socket.off('game_start');
+    socket.offAny();
   }
 
   onUsernameChange = (username: string) => {
@@ -142,7 +152,6 @@ class Game extends Component<{}, State> {
   }
 
   onWordSubmit = () => {
-    console.log('submit_word');
     socket.emit('submit_word', this.state.word);
     this.updateUser({ userId: socket.userId, ready: true });
     this.setState({ waiting: true });
@@ -184,7 +193,7 @@ class Game extends Component<{}, State> {
       word,
       playerOrder,
       gameSummary,
-      guesses
+      history
     } = this.state;
 
     switch (gameState) {
@@ -216,7 +225,7 @@ class Game extends Component<{}, State> {
             users={users}
             word={word}
             playerOrder={playerOrder}
-            initialGuesses={guesses}
+            initialHistory={history}
             onUpdateUser={this.updateUser.bind(this)}
             onGameOver={() => console.log('game over!')}
           />
@@ -257,7 +266,7 @@ type SocketGameStart = {
 type SocketGameState = {
   state: GameState,
   currentTurn: string;
-  guesses: OnlineGuess[];
+  history: { from: string, to: string, word: string, common: number }[];
   playerOrder: string[];
   users: User[];
   word: string;

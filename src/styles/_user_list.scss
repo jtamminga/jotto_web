@@ -4,6 +4,7 @@ $status-size: 12px;
   .user {
     display: flex;
     align-items: center;
+
     .status {
       width: $status-size;
       height: $status-size;
@@ -14,6 +15,19 @@ $status-size: 12px;
       &.connected {
         background-color: $success-color;
       }
+    }
+
+    .username {
+      text-transform: uppercase;
+      width: 65px;
+    }
+
+    .ready {
+      color: $text-success;
+    }
+
+    .waiting {
+      color: $text-warning;
     }
   }
 }

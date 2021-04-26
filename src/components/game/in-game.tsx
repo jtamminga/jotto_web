@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import socket from '../../socket';
 import Guess from './guess';
 import { duplicates } from '../../core/utils';
 import { User, PlayerTurn, OnlineGuess, WordError } from '../../core/types';
 import PlayerHistory from './player-history';
+import '../../core/arrays';
+
 
 type Props = {
   users: User[];
   playerOrder: string[];
   word: string;
-  initialGuesses: OnlineGuess[],
+  initialHistory: PlayerTurn[],
   onUpdateUser: (user: Partial<User>) => void,
   onGameOver: () => void
 }
@@ -30,16 +32,35 @@ class InGame extends Component<Props, State> {
     this.id = 0;
     this.guessId = 0;
 
-    let guesses = props.initialGuesses.length > 0 ?
-      props.initialGuesses : [this.addGuess()];
+    
 
     this.state = {
       currentTurn: props.playerOrder[0],
-      guesses,
-      history: [],
-      hasWon: false
+      guesses: this.historyToGuesses(props.initialHistory),
+      history: props.initialHistory,
+      hasWon: props.users.findUser(socket.userId).won
     };
   }
+
+  historyToGuesses(history: PlayerTurn[]): OnlineGuess[] {
+    let guesses: OnlineGuess[] = history
+      .filter(turn => turn.playerId === socket.userId)
+      .map((turn, i) => ({
+        id: i,
+        word: turn.word,
+        common: turn.common,
+        invalidChar: false,
+        wordShort: false,
+        doubleLetter: false,
+        badNumber: false,
+        submitted: true
+      }));
+
+    this.id = guesses.length;
+    guesses.push(this.addGuess());
+
+    return guesses;
+  } 
 
   componentDidMount() {
     socket.on('turn', this.onTurn);
@@ -62,13 +83,7 @@ class InGame extends Component<Props, State> {
     const { users, playerOrder } = this.props;
     const index = playerOrder.findIndex(i => i === id);
     const nextPlayerId = playerOrder[(index + 1) % playerOrder.length];
-    const nextPlayer = users.find(u => u.userId === nextPlayerId);
-
-    if (!nextPlayer) {
-      throw new Error('Cannot find opponent');
-    }
-
-    return nextPlayer;
+    return users.findUser(nextPlayerId);
   }
 
   updatedHistory(turn: SocketTurn): PlayerTurn[] {
@@ -157,7 +172,8 @@ class InGame extends Component<Props, State> {
     });
   }
 
-  submitGuess(guess: OnlineGuess): void {    
+  submitGuess(guess: OnlineGuess): void {
+    console.log('submit_guess', guess);
     const guesses = this.updateGuess(guess.id, { submitted: true });
     socket.emit('submit_guess', guess.word);
 

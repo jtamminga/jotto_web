@@ -1,6 +1,5 @@
-import React from 'react';
 import { User } from '../../core/types';
-import UserItem from './user'
+import UserConnected from './user-connected'
 
 type Props = {
   username: string;
@@ -19,22 +18,29 @@ export default function Username({
 }: Props) {
   return (
     <div className="container-narrow">
-      <div className="mb">
+      <div className="d-flex mb">
         <input
           placeholder="Enter Name"
           disabled={waiting}
           value={username}
+          maxLength={5}
           onChange={e => onChange(e.target.value)}
         />
+
+        <button
+          className="btn ml"
+          onClick={onSubmit}
+          disabled={waiting}
+          style={{ width: 150 }}
+        >
+          { waiting ? 'Waiting...' : 'Next' }
+        </button>
       </div>
       <div className="user-list">
         { users.map((user, i) =>
-          <UserItem key={i} {...user} />
+          <UserConnected key={i} {...user} />
         )}
       </div>
-      <button className="btn" onClick={onSubmit} disabled={waiting}>
-        { waiting ? 'Waiting...' : 'Next' }
-      </button>
     </div>
   );
 }
