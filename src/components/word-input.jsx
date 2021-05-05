@@ -31,7 +31,6 @@ class WordInput extends PureComponent {
     const wordClasses = ['word', 'input-chars']
     if (isFaded) wordClasses.push('faded')
     
-    
     return (
       <>
         { word === '' || hasError || isFocused ?
