@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import socket from '../../socket';
 import Guess from './guess';
-import { duplicates } from '../../core/utils';
-import { User, PlayerTurn, OnlineGuess, WordError } from '../../core/types';
+import { User, PlayerTurn, OnlineGuess } from '../../core/types';
 import PlayerHistory from './player-history';
+import { validWord } from '../../core/words';
 import '../../core/arrays';
 
 
@@ -150,14 +150,6 @@ class InGame extends Component<Props, State> {
     };
   }
 
-  validGuess(word: string): WordError {
-    return {
-      invalidChar: !/^[a-z]*$/.test(word),
-      wordShort: word.length !== 5,
-      doubleLetter: duplicates([...word]).length > 0
-    };
-  }
-
   setGuesses(id: number, guess: Partial<OnlineGuess>): void {
     this.setState({ guesses: this.updateGuess(id, guess) });
   }
@@ -167,13 +159,12 @@ class InGame extends Component<Props, State> {
       if (g.id !== id) return g;
 
       const updated = { ...g, ...guess };
-      const errors = this.validGuess(updated.word);
+      const errors = validWord(updated.word);
       return { ...updated, ...errors };
     });
   }
 
   submitGuess(guess: OnlineGuess): void {
-    console.log('submit_guess', guess);
     const guesses = this.updateGuess(guess.id, { submitted: true });
     socket.emit('submit_guess', guess.word);
 

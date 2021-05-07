@@ -80,7 +80,6 @@ class Guess extends PureComponent<Props, {}> {
               disabled={!canSubmit}
             >Submit</button>
           }
-          
         </div>
 
         <div className="guess-errors">

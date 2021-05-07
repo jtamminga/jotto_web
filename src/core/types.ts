@@ -11,14 +11,11 @@ export enum GameState {
   GAME_OVER
 }
 
-export interface Guess {
+export interface Guess extends WordError {
   id: number;
   word: string;
   common: number | string;
 
-  invalidChar: boolean,
-  wordShort: boolean,
-  doubleLetter: boolean,
   badNumber: boolean
 }
 

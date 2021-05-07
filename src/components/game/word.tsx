@@ -1,5 +1,6 @@
 import { User } from '../../core/types';
-import UserConnected from './user-ready'
+import UserConnected from './user-ready';
+import WordInput from './word-input';
 
 type Props = {
   word: string;
@@ -19,11 +20,16 @@ export default function Word({
   return (
     <div className="container-narrow">
       <div className="d-flex mb">
-        <input
+        {/* <input
           placeholder="Enter Word"
           disabled={waiting}
           value={word}
           onChange={e => onChange(e.target.value)}
+        /> */}
+
+        <WordInput
+          word={word}
+          onChange={onChange}
         />
 
         <button
