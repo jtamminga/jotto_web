@@ -66,7 +66,7 @@ class Guess extends PureComponent<Props, {}> {
             onWordChange={this.onChange}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
-            isFocused={isFocused}
+            isFocused={!submitted}
             hasError={errors.length > 0}
           />
 

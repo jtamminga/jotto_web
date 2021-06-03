@@ -1,11 +1,18 @@
 import { Component } from 'react';
-import socket from '../../socket';
-import Guess from './guess';
-import { User, PlayerTurn, OnlineGuess } from '../../core/types';
-import PlayerHistory from './player-history';
-import { validWord } from '../../core/words';
-import '../../core/arrays';
+import socket from 'socket';
+import Guess from 'components/game/guess';
+import { User, PlayerTurn, OnlineGuess } from 'core/types';
+import PlayerHistory from 'components/game/player-history';
+import { validWord } from 'core/words';
+import 'core/arrays';
 
+type SocketTurn = {
+  word: string;
+  common: number;
+  nextPlayer: string;
+  gameOver: boolean;
+  won: boolean;
+}
 
 type Props = {
   users: User[];
@@ -31,8 +38,6 @@ class InGame extends Component<Props, State> {
     super(props);
     this.id = 0;
     this.guessId = 0;
-
-    
 
     this.state = {
       currentTurn: props.playerOrder[0],
@@ -175,6 +180,33 @@ class InGame extends Component<Props, State> {
     this.setState({ guesses });
   }
 
+  renderMyWord() {
+    const { word } = this.props;
+
+    return (
+      <div className="d-flex">
+        My word
+        <div className="ml-s label">
+          {word}
+        </div>
+      </div>
+    );
+  }
+
+  renderCurrentTurn() {
+    const curUsername = this.getCurrentPlayer()?.username;
+    const myTurn = this.isMyTurn();
+
+    return (
+      <div className="d-flex">
+        <span>Current turn</span>
+        <div className={'ml-s label' + (myTurn ? ' label-success' : '')}>
+          {curUsername}
+        </div>
+      </div>
+    );
+  }
+
   renderGuesses(guesses: OnlineGuess[]) {
     return guesses.map((guess, i) =>
       <Guess
@@ -188,21 +220,16 @@ class InGame extends Component<Props, State> {
   }
 
   render() {
-    const { word } = this.props;
     const { guesses, history, hasWon } = this.state;
-    const curUsername = this.getCurrentPlayer()?.username;
 
     return (
       <>
-        <div className="header">
-          <h3>Five Letters</h3>
+        <div className="d-flex mb">
+          {this.renderMyWord()}
+          {this.renderCurrentTurn()}
         </div>
 
         <PlayerHistory history={history} />
-
-        <div>My word: {word}</div>
-        <div>My turn: {this.isMyTurn() ? 'yes' : 'no'}</div>
-        <div>current: {curUsername}</div>
 
         <div className="guesses-container">
           <div className="guesses">
@@ -216,14 +243,6 @@ class InGame extends Component<Props, State> {
       </>
     )
   }
-}
-
-type SocketTurn = {
-  word: string;
-  common: number;
-  nextPlayer: string;
-  gameOver: boolean;
-  won: boolean;
 }
 
 export default InGame;

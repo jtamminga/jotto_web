@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { wordErrors } from "../../core/words";
+import { wordErrors } from "core/words";
 import WordInput from "../word-input";
 
 type Props = {

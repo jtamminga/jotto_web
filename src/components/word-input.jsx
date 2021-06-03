@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import { PureComponent } from 'react'
 import { DeductionContext } from '../core/context'
 import { charClasses } from '../core/utils'
 

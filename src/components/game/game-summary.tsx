@@ -1,5 +1,4 @@
-import React from 'react';
-import { GameSummary as Summary } from '../../game';
+import { GameSummary as Summary } from 'pages/game';
 
 type Props = {
   summary: Summary[]

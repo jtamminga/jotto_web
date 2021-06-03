@@ -1,5 +1,6 @@
 .d-flex {
   display: flex;
+  align-items: center;
 }
 
 .mb {
@@ -12,4 +13,8 @@
 
 .ml {
   margin-left: 15px;
+}
+
+.ml-s {
+  margin-left: 5px;
 }

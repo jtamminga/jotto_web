@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import Username from './components/game/username';
-import Word from './components/game/word';
-import InGame from './components/game/in-game';
-import EndGameSummary from './components/game/game-summary';
-import socket, { updateSocketAuth } from './socket';
-import { OnlineGuess, User, GameState, PlayerTurn } from './core/types';
-import './styles/app-online.scss'
+import Username from './username';
+import Word from 'pages/game/word';
+import InGame from 'pages/game/in-game';
+import EndGameSummary from 'components/game/game-summary';
+import socket, { updateSocketAuth } from 'socket';
+import { User, GameState, PlayerTurn } from 'core/types';
+import { UsersContext, SessionContext, WaitingContext } from 'core/context';
+import 'styles/app-online.scss';
 
 type State = {
-  username: string;
   gameState: GameState;
   connected: boolean;
   waiting: boolean;
@@ -21,7 +21,6 @@ type State = {
 
 class Game extends Component<{}, State> {
   state: Readonly<State> = {
-    username: '',
     gameState: GameState.PICK_USERNAME,
     connected: false,
     waiting: false,
@@ -85,7 +84,7 @@ class Game extends Component<{}, State> {
         throw new Error('Cannot find myself');
       }
 
-      this.setState({ waiting: true, users, username: me.username });
+      this.setState({ waiting: true, users });
     });
 
     socket.on('user_connect', (user: User) => {
@@ -137,24 +136,16 @@ class Game extends Component<{}, State> {
     socket.offAny();
   }
 
-  onUsernameChange = (username: string) => {
-    this.setState({ username });
-  }
-
-  onUsernameSubmit = () => {
-    updateSocketAuth({ username: this.state.username });
+  onUsernameSubmit = (username: string) => {
+    updateSocketAuth({ username });
     socket.connect();
     this.setState({ waiting: true });
   }
 
-  onWordChange = (word: string) => {
-    this.setState({ word });
-  }
-
-  onWordSubmit = () => {
-    socket.emit('submit_word', this.state.word);
+  onWordSubmit = (word: string) => {
+    socket.emit('submit_word', word);
     this.updateUser({ userId: socket.userId, ready: true });
-    this.setState({ waiting: true });
+    this.setState({ word, waiting: true });
   }
 
   updateUser(user: Partial<User>): void {
@@ -188,8 +179,6 @@ class Game extends Component<{}, State> {
     const {
       gameState,
       users,
-      waiting,
-      username,
       word,
       playerOrder,
       gameSummary,
@@ -199,24 +188,12 @@ class Game extends Component<{}, State> {
     switch (gameState) {
       case GameState.PICK_USERNAME:
         return (
-          <Username
-            username={username}
-            users={users}
-            waiting={waiting}
-            onChange={this.onUsernameChange}
-            onSubmit={this.onUsernameSubmit}
-          />
+          <Username onSubmit={this.onUsernameSubmit} />
         );
 
       case GameState.PICK_WORD:
         return (
-          <Word
-            word={word}
-            users={users}
-            waiting={waiting}
-            onChange={this.onWordChange}
-            onSubmit={this.onWordSubmit}
-          />
+          <Word onSubmit={this.onWordSubmit} />
         );
         
       case GameState.START:
@@ -240,17 +217,15 @@ class Game extends Component<{}, State> {
 
   render() {
     return (
-      <SessionContext.Provider value={{ userId: socket.userId }}>
-        { this.renderParts() }
+      <SessionContext.Provider value={socket.userId}>
+        <UsersContext.Provider value={this.state.users}>
+          <WaitingContext.Provider value={this.state.waiting}>
+            { this.renderParts() }
+          </WaitingContext.Provider>
+        </UsersContext.Provider>
       </SessionContext.Provider>
     )
   }
-}
-
-export const SessionContext = React.createContext<Context>({ userId: undefined });
-
-type Context = {
-  userId: string | undefined;
 }
 
 type SocketSession = {

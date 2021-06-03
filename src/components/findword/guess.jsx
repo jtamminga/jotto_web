@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
-import WordInput from './word-input'
+import WordInput from '../word-input'
 import CommonInput from './common-input'
-import { hasError } from '../core/utils'
+import { hasError } from '../../core/utils'
 
 class Guess extends PureComponent {
   state = {
@@ -80,7 +80,6 @@ class Guess extends PureComponent {
 
     if (common === '')
       return []
-
     if (badNumber)
       errors.push('Number must be between 0 and 5')
 

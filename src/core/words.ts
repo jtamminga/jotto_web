@@ -19,7 +19,7 @@ class Words {
             throw new Error('Cannot find words dictionary');
         }
 
-        const data = wordsComponent.innerHTML;
+        const data = wordsComponent.dataset.words ?? '';
         return chunks(data, 5);
     }
 

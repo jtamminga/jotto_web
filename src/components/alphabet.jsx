@@ -1,6 +1,5 @@
-import React from 'react'
-import { DeductionContext } from '../core/context'
-import { charClasses } from '../core/utils'
+import { DeductionContext } from 'core/context';
+import { charClasses } from 'core/utils';
 
 export default function Alphabet() {
   const alphabet = [...'abcdefghijklmnopqrstuvwxyz']

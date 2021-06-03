@@ -1,4 +1,4 @@
-import { SessionContext } from '../../game'
+import { SessionContext } from 'core/context';
 
 export type Props = {
   userId: string;
@@ -12,11 +12,11 @@ export default function UserConnected(
 ) {
   return (
     <SessionContext.Consumer>
-      { context =>
+      { contextUserId =>
         <div className="user">
           <div className={'status' + (connected ? ' connected' : '')}></div>
 
-          { userId === context.userId ?
+          { userId === contextUserId ?
             <b className="username">{username}</b>
             :
             <span className="username">{username}</span>
